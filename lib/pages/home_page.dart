@@ -1,12 +1,13 @@
 import 'dart:ui';
 
-import 'package:fitness_ui_kit/data/latest_workout.dart';
-import 'package:fitness_ui_kit/theme/colors.dart';
-import 'package:fitness_ui_kit/widget/chart_activity_status.dart';
-import 'package:fitness_ui_kit/widget/chart_sleep.dart';
-import 'package:fitness_ui_kit/widget/chart_workout_progress.dart';
-import 'package:fitness_ui_kit/widget/water_intake_progressbar.dart';
-import 'package:fitness_ui_kit/widget/water_intake_timeline.dart';
+import 'package:lifestyle/data/latest_workout.dart';
+import 'package:lifestyle/pages/today_target_detail_page.dart';
+import 'package:lifestyle/theme/colors.dart';
+import 'package:lifestyle/widget/chart_activity_status.dart';
+import 'package:lifestyle/widget/chart_sleep.dart';
+import 'package:lifestyle/widget/chart_workout_progress.dart';
+import 'package:lifestyle/widget/water_intake_progressbar.dart';
+import 'package:lifestyle/widget/water_intake_timeline.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
@@ -17,7 +18,17 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                         height: 5,
                       ),
                       Text(
-                        "Sopheamen",
+                        "Aniruddha",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -90,29 +101,22 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "BMI (Body Mass Index)",
+                                "Week 1-2",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: white),
                               ),
-                              Text(
-                                "You have a normal weight",
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                    color: white),
-                              ),
                               Container(
-                                width: 95,
-                                height: 35,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                         colors: [fourthColor, thirdColor]),
                                     borderRadius: BorderRadius.circular(20)),
                                 child: Center(
                                   child: Text(
-                                    "View More",
+                                    "View Full Week Plan",
                                     style:
                                         TextStyle(fontSize: 13, color: white),
                                   ),
@@ -133,14 +137,29 @@ class _HomePageState extends State<HomePage> {
                           gradient:
                               LinearGradient(colors: [fourthColor, thirdColor]),
                         ),
-                        child: Center(
-                          child: Text(
-                            "20,3",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: white),
-                          ),
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              child: CircularProgressIndicator(
+                                backgroundColor: primary,
+                                strokeWidth: 10,
+                                value: 0.25,
+                                color: googleColor,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "25%",
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: white),
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     ],
@@ -162,15 +181,18 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Today Target",
+                        "Today Workout",
                         style: TextStyle(
                             fontSize: 17,
                             color: black,
                             fontWeight: FontWeight.w600),
                       ),
                       InkWell(
-                        onTap: (){
-                          Navigator.pushNamed(context, "/today_target_detail");
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (c) => TodayTargetDetailPage()));
                         },
                         child: Container(
                           width: 70,
@@ -194,199 +216,11 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 30,
               ),
-              Text(
-                "Activity Status",
-                style: TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold, color: black),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                width: double.infinity,
-                height: 150,
-                decoration: BoxDecoration(
-                    color: secondary.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(30)),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      child: LineChart(activityData()),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(
-                        "Heart Rate",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: (size.width - 80) / 2,
-                    height: 320,
-                    decoration: BoxDecoration(
-                        color: white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: black.withOpacity(0.01),
-                              spreadRadius: 20,
-                              blurRadius: 10,
-                              offset: Offset(0, 10))
-                        ],
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Row(
-                        children: [
-                          WateIntakeProgressBar(),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Flexible(
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Water Intake",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Spacer(),
-                                Column(
-                                  children: [
-                                    Text(
-                                      "Real time updates",
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: black.withOpacity(0.5)),
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    WaterIntakeTimeLine()
-                                  ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        width: (size.width - 80) / 2,
-                        height: 150,
-                        decoration: BoxDecoration(
-                            color: white,
-                            boxShadow: [
-                              BoxShadow(
-                                  color: black.withOpacity(0.01),
-                                  spreadRadius: 20,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 10))
-                            ],
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Sleep",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              Spacer(),
-                              Flexible(
-                                child: LineChart(sleepData()),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                          width: (size.width - 80) / 2,
-                          height: 150,
-                          decoration: BoxDecoration(
-                              color: white,
-                              boxShadow: [
-                                BoxShadow(
-                                    color: black.withOpacity(0.01),
-                                    spreadRadius: 20,
-                                    blurRadius: 10,
-                                    offset: Offset(0, 10))
-                              ],
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Calories",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Spacer(),
-                                Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          colors: [
-                                            fourthColor,
-                                            primary.withOpacity(0.5)
-                                          ]),
-                                      shape: BoxShape.circle),
-                                  child: Center(
-                                      child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle, color: primary),
-                                    child: Center(
-                                      child: Text(
-                                        "230 Cal",
-                                        style: TextStyle(
-                                            fontSize: 10, color: white),
-                                      ),
-                                    ),
-                                  )),
-                                )
-                              ],
-                            ),
-                          ))
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Workout Progress",
+                    "Weight Progress",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -437,20 +271,21 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 30,
               ),
-               Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Latest Workout",
+                    "Other Details",
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: black),
                   ),
-                   Text(
-                          "See more",
-                          style: TextStyle(fontSize: 15, color: black.withOpacity(0.5)),
-                        ),
+                  // Text(
+                  //   "See more",
+                  //   style:
+                  //       TextStyle(fontSize: 15, color: black.withOpacity(0.5)),
+                  // ),
                 ],
               ),
               SizedBox(
@@ -461,91 +296,67 @@ class _HomePageState extends State<HomePage> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: black.withOpacity(0.01),
-                        spreadRadius: 20,
-                        blurRadius: 10,
-                        offset:Offset(0, 10)
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(12)
-                ),
-                child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: AssetImage(latestWorkoutJson[index]['img']))
-                          ),
-                        ),
-                        SizedBox(width: 15,),
-                        Flexible(
-                          child: Container(
-                            height: 55,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(latestWorkoutJson[index]['title'],style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight:FontWeight.bold
-                                ),),
-                                Text(latestWorkoutJson[index]['description'],style: TextStyle(
-                                  fontSize: 13,
-                                  color: black.withOpacity(0.5)
-                                ),),
-                                Stack(
-                                  children:[
-                                    Container(
-                                      width: size.width,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        color: bgTextField
-                                      ),
-                                    ),
-                                    Container(
-                                      width: size.width*(latestWorkoutJson[index]['progressBar']),
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        gradient: LinearGradient(colors: [
-                                          primary, secondary
-                                        ])
-                                      ),
-                                    )
-                                  ]
-                                )
-                              ],
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: white,
+                          boxShadow: [
+                            BoxShadow(
+                                color: black.withOpacity(0.01),
+                                spreadRadius: 20,
+                                blurRadius: 10,
+                                offset: Offset(0, 10))
+                          ],
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          latestWorkoutJson[index]['img']))),
                             ),
-                          ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: Container(                                
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      latestWorkoutJson[index]['title'],
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: primary)),
+                              child: Center(
+                                child: Icon(Icons.arrow_forward_ios,
+                                    size: 11, color: primary),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 15,),
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: primary
-                            )
-                          ),
-                          child: Center(
-                            child: Icon(Icons.arrow_forward_ios,size:11,color:primary),
-                          ),
-                        ),
-
-                      ],
+                      ),
                     ),
-                ),
-              ),
                   );
                 }),
               )

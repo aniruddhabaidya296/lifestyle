@@ -1,4 +1,4 @@
-import 'package:fitness_ui_kit/theme/colors.dart';
+import 'package:lifestyle/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class WateIntakeProgressBar extends StatelessWidget {

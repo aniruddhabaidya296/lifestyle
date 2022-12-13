@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:fitness_ui_kit/data/latest_workout.dart';
-import 'package:fitness_ui_kit/theme/colors.dart';
+import 'package:lifestyle/data/latest_workout.dart';
+import 'package:lifestyle/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';

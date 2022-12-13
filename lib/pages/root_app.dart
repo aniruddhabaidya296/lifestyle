@@ -1,5 +1,5 @@
-import 'package:fitness_ui_kit/pages/home_page.dart';
-import 'package:fitness_ui_kit/theme/colors.dart';
+import 'package:lifestyle/pages/home_page.dart';
+import 'package:lifestyle/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 

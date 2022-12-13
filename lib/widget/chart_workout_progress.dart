@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:fitness_ui_kit/theme/colors.dart';
+import 'package:lifestyle/theme/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 

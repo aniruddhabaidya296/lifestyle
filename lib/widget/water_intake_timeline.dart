@@ -1,5 +1,5 @@
-import 'package:fitness_ui_kit/data/water_intake.dart';
-import 'package:fitness_ui_kit/theme/colors.dart';
+import 'package:lifestyle/data/water_intake.dart';
+import 'package:lifestyle/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class WaterIntakeTimeLine extends StatelessWidget {
